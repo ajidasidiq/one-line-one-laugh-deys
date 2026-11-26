@@ -18,6 +18,10 @@ def main() -> None:
         raise ValueError("entry must be a single non-empty line")
     if len(line) > 140:
         raise ValueError(f"entry is {len(line)} characters, over the 140 cap")
+    if line != line.strip():
+        raise ValueError("entry has leading or trailing whitespace")
+    if any(ord(c) < 32 or ord(c) == 127 for c in line):
+        raise ValueError("entry contains a control character")
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8", newline="") as handle:
         handle.write(line)
